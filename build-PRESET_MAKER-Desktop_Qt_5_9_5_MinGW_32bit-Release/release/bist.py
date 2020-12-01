@@ -57,7 +57,7 @@ def get_cmd_list(preset_val):
     arg1 = 0
     
     split_var = preset_val.split('_')
-    print(split_var[0])
+    print(preset_val + " and " + split_var[0])
     if split_var[0] == 'ch' :
         if split_var[1] == 'set' or split_var[1] == 'wait':
             try:
@@ -172,18 +172,27 @@ def Execute_BIST_Cmd(bist_cmd, mDevices, log_name):
 def Execute_Chamber_Cmd(chb_cmd,arg1,chb_dev,mDevice,log_name):
     ChmbCtrl = Chamber_Control.Chamber(chb_dev,mDevice,log_name)
     if chb_cmd == 'start':
-        ChmbCtrl.start()
         prt_log('< Chamber > Start CMD\n')
+        if ChmbCtrl.start() == -1:
+            prt_log('chamber start error!\n')
+            return -1
     elif chb_cmd == 'stop':
-        ChmbCtrl.stop()
         prt_log('< Chamber > Stop CMD\n')
+        if ChmbCtrl.stop() == -1:
+            prt_log('chamber stop error!\n')
+            return -1
     elif chb_cmd == 'get_temp':
         prt_log('< Chamber > Get temp CMD\n')
-        retVal = ChmbCtrl.get_temp()
-        prt_log('Current temperature is ' + str(retVal) + '\n')
+        retVal,retVal2 = ChmbCtrl.get_temp()
+        if retVal == 'error':
+            prt_log('Get temperature error!\n')
+            return -1
+        prt_log('Current temperature is ' + str(retVal) + 'huminity is ' + str(retVal2) + '%\n')
     elif chb_cmd == 'set_temp':
         prt_log('< Chamber > Set temp CMD ' + str(arg1) + '\'C\n')
-        ChmbCtrl.set_temp(arg1)
+        if ChmbCtrl.set_temp(arg1) == 'error':
+            prt_log('Set temperature error!\n')
+            return -1
     elif chb_cmd == 'wait_temp':
         prt_log('< Chamber > Wait temperature CMD ' + str(arg1) + '\'C\n')
         if ChmbCtrl.wait_temp(arg1) == -1:
@@ -195,9 +204,7 @@ def Execute_Chamber_Cmd(chb_cmd,arg1,chb_dev,mDevice,log_name):
         prt_log('< Chamber > Wait time CMD ' + str(arg1) + 'sec\n')
         ChmbCtrl.wait_time(arg1)
         prt_log('Wait time complete\n')
-
     return 0
-
 
 def Execute_Power_Cmd(pwr_cmd,mDevice,log_name):
     PwrCtrl = Power_control.PowerCtrl(mDevice,log_name)
