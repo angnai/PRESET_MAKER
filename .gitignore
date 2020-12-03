@@ -4,3 +4,4 @@
 *.log
 build-PRESET_MAKER-Desktop_Qt_5_9_5_MinGW_32bit-Debug/
 *.zip
+*.ini

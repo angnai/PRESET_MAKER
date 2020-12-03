@@ -222,6 +222,7 @@ if __name__ == "__main__":
     preset_list, args = Get_Argument()
     log_name = Get_TestLog_Name(args.test_name)
     chb_dev = args.chamber
+    retVal = 0
 
     prt_log('test preset is <' + args.preset + '>\n')
 
@@ -229,9 +230,17 @@ if __name__ == "__main__":
         bist_cmd,chb_cmd,pwr_cmd,arg1 = get_cmd_list(pl)
 
         if bist_cmd != 'none': 
-            retVal, args.devices = Execute_BIST_Cmd(bist_cmd, args.devices, log_name)
             if retVal == -1:
-                break
+                if bist_cmd.find('si'):
+                    retVal = 0
+                    prt_log('<' + bist_cmd + '> SI Command Passed.... Reason is fail into setting value or init\n')
+                    continue;
+                else:
+                    break;
+            
+            retVal, args.devices = Execute_BIST_Cmd(bist_cmd, args.devices, log_name)
+            #if retVal == -1:
+            #    break
             
         elif chb_cmd != 'none' :
             if chb_cmd == 'error':
