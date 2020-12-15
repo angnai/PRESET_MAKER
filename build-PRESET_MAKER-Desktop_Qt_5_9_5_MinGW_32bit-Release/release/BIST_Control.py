@@ -2,11 +2,15 @@ import serial
 import time
 import threading
 import datetime
+import json
+import os.path
 
 BAUDRATE = 115200
 MIN = (60)
 HOUR = (MIN*60)
-LIMIT_TIMEOUT = (1*HOUR)
+LIMIT_TIMEOUT = (3*HOUR)
+
+
 
 class BIST(threading.Thread) :
     def __init__(self, comport, CmdValue, LogName):
@@ -21,6 +25,23 @@ class BIST(threading.Thread) :
         self.com = serial.Serial(self.comport,BAUDRATE,timeout = 1)
         
         self.exit = 0
+
+    def _json_init(self):
+        for i in range(1, 5):
+            self.para_json['soc_index'+str(i+1)] = {'dqs_ds':'1','dq_ds':'1','re_ds':'1','ctrl_ds':'1','dqs_odt':'1','dq_odt':'1'}
+            self.para_json['nand_index'+str(i+1)] = {'nand_ds':'1','nand_podt':'1','nand_rodt':'1'}
+        print('a')
+        input()
+        with open("para_info.json", "w") as json_file:
+            json.dump(self.para_json, json_file)
+
+    def _json_write(self):
+        with open("para_info.json", "w") as json_file:
+            json.dump(self.para_json, json_file)
+
+    def _json_read(self):
+        with open("para_info.json", "r") as json_file:
+            self.para_json = json.load(json_file)
 
     def __del__(self):
         self.com.close()

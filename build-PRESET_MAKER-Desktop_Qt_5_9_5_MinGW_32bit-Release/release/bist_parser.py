@@ -6,6 +6,8 @@ import seaborn as sns
 import matplotlib.cm as cm
 from matplotlib.colors import LinearSegmentedColormap
 
+import numpy as np
+from matplotlib.ticker import ScalarFormatter
 
 def file_open_fnc(strPath):
     f = open(strPath,'r')
@@ -146,18 +148,21 @@ for strN in range(len(strLines)):
                 startIndex = strLines[np].find("LUN[ALL] PROG ")
                 if startIndex != -1:
                     strVal = strLines[np]
-                    strValueWrite[n].append(strVal[14:(14+tapcnt)])
+                    #strValueWrite[n].append(strVal[14:(14+tapcnt)])
+                    strValueWrite[n].append(strVal[14:(len(strVal)+14)])
                     break
-
+		    
             for np in range(strN,len(strLines)):
                 startIndex = strLines[np].find("LUN[ALL] READ ")
                 if startIndex != -1:
                     strVal = strLines[np]
-                    strValueRead[n].append(strVal[14:(14+tapcnt)])
+                    #strValueRead[n].append(strVal[14:(14+tapcnt)])
+                    strValueRead[n].append(strVal[14:(len(strVal)+14)])
                     break
 
             strCount[n] = strCount[n] + 1
             
+            strValueWrite[n][strCount[n]-1] = strValueWrite[n][strCount[n]-1].replace('u','7 ')
             strValueWrite[n][strCount[n]-1] = strValueWrite[n][strCount[n]-1].replace('%','7 ')
             strValueWrite[n][strCount[n]-1] = strValueWrite[n][strCount[n]-1].replace('x','7 ')
             strValueWrite[n][strCount[n]-1] = strValueWrite[n][strCount[n]-1].replace('z','7 ')
@@ -167,6 +172,7 @@ for strN in range(len(strLines)):
             strValueWrite[n][strCount[n]-1] = strValueWrite[n][strCount[n]-1].replace('$','1 ')
             strValueWrite[n][strCount[n]-1] = strValueWrite[n][strCount[n]-1].replace('!','1 ')
             
+            strValueRead[n][strCount[n]-1] = strValueRead[n][strCount[n]-1].replace('u','7 ')
             strValueRead[n][strCount[n]-1] = strValueRead[n][strCount[n]-1].replace('%','7 ')
             strValueRead[n][strCount[n]-1] = strValueRead[n][strCount[n]-1].replace('x','7 ')
             strValueRead[n][strCount[n]-1] = strValueRead[n][strCount[n]-1].replace('z','7 ')
@@ -184,7 +190,8 @@ for strN in range(len(strLines)):
                     if startIndex != -1:
                         #print(str(n) + " " + str(li) + " " + str(strLunCount[n][li]) + " " + strTemp )
                         strVal = strLines[np]
-                        strValueLunWrite[n][li].append(strVal[14:(14+tapcnt)])
+                        #strValueLunWrite[n][li].append(strVal[14:(14+tapcnt)])
+                        strValueLunWrite[n][li].append(strVal[14:(len(strVal)+14)])
                         break
             
             for li in range(lun):
@@ -194,13 +201,15 @@ for strN in range(len(strLines)):
                     if startIndex != -1:
                         #print(str(n) + " " + str(li) + " " + str(strLunCount[n][li]) + " " + strTemp )
                         strVal = strLines[np]
-                        strValueLunRead[n][li].append(strVal[14:(14+tapcnt)])
+                        #strValueLunRead[n][li].append(strVal[14:(14+tapcnt)])
+                        strValueLunRead[n][li].append(strVal[14:(len(strVal)+14)])
                         break
 
             for li in range(lun):
                 strLunCount[n][li] = strLunCount[n][li] + 1
                 print(str(n) + " " + str(li) + " " + str(strLunCount[n][li]-1) + " " + strValueLunWrite[n][li][strLunCount[n][li]-1])
 
+                strValueLunWrite[n][li][strLunCount[n][li]-1] = strValueLunWrite[n][li][strLunCount[n][li]-1].replace('u','7 ')
                 strValueLunWrite[n][li][strLunCount[n][li]-1] = strValueLunWrite[n][li][strLunCount[n][li]-1].replace('%','7 ')
                 strValueLunWrite[n][li][strLunCount[n][li]-1] = strValueLunWrite[n][li][strLunCount[n][li]-1].replace('x','7 ')
                 strValueLunWrite[n][li][strLunCount[n][li]-1] = strValueLunWrite[n][li][strLunCount[n][li]-1].replace('z','7 ')
@@ -211,6 +220,7 @@ for strN in range(len(strLines)):
                 strValueLunWrite[n][li][strLunCount[n][li]-1] = strValueLunWrite[n][li][strLunCount[n][li]-1].replace('!','1 ')
                 
                             
+                strValueLunRead[n][li][strLunCount[n][li]-1] = strValueLunRead[n][li][strLunCount[n][li]-1].replace('u','7 ')
                 strValueLunRead[n][li][strLunCount[n][li]-1] = strValueLunRead[n][li][strLunCount[n][li]-1].replace('%','7 ')
                 strValueLunRead[n][li][strLunCount[n][li]-1] = strValueLunRead[n][li][strLunCount[n][li]-1].replace('x','7 ')
                 strValueLunRead[n][li][strLunCount[n][li]-1] = strValueLunRead[n][li][strLunCount[n][li]-1].replace('z','7 ')
@@ -315,20 +325,25 @@ if output_index == "ch":
             strVal = json_data["test"+str(np)]["w"+str(n)]
             #print('ch [' + str(n) + '_w_' + str(np) + '] ' + strVal)
             data_test_w[n].append(strVal.split(' '))
-            data_test_w[n][np].remove('')
+            data_test_w[n][np] = ' '.join(data_test_w[n][np]).split()
+            #data_test_w[n][np].remove('')
+        
             
     for n in range(channel_cnt):
         data_test_r.append([])
         for np in range(test_cnt):
             strVal = json_data["test"+str(np)]["r"+str(n)]
-            #print('ch [' + str(n) + '_r_' + str(np) + '] ' + strVal)
+            print('ch [' + str(n) + '_r_' + str(np) + '] ' + strVal)
             data_test_r[n].append(strVal.split(' '))
-            data_test_r[n][np].remove('')
+            data_test_r[n][np] = ' '.join(data_test_r[n][np]).split()
+            #data_test_r[n][np].remove('')
+            
 
         #print('\n\n')
 
     for np in range(ch):
-        for n in range(tc):
+        for n in range(test_cnt):
+            print(str(data_test_w[np][n])+ '\n')
             data_test_w[np][n] = [int (i) for i in data_test_w[np][n]]
             data_test_r[np][n] = [int (i) for i in data_test_r[np][n]]
 
@@ -343,28 +358,49 @@ if output_index == "ch":
 
 
     testlist = []
-    for n in range(tc):
-        testlist.append('test' + str(n))
+    for n in range(test_cnt):
+        if n%3 == 0:
+            testlist.append('test' + str(n))
 
     #print(testlist)
     #print('\n\n')
-
-
-    cmap = LinearSegmentedColormap.from_list('custom blue',     ['#0000ff','#ffffff'], N=3)
     
 
     plt.figure(1)
     for n in range(ch):
         plt.subplot(ch,1,n+1)
         sns.cubehelix_palette(as_cmap=True, reverse=True)
+        
+        if (n%2) == 0: 
+            cmap = LinearSegmentedColormap.from_list('custom blue',     ['#0099cc','#ffffff'], N=3)
+        else:
+            cmap = LinearSegmentedColormap.from_list('custom blue2',     ['#99ffcc','#ffffff'], N=3)
+
         sns.heatmap(data=data_test_w[n],fmt='.1f',linewidths='.05',cmap=cmap)
+        plt.ylabel('CH ' + str(n))
+        
+        ax = plt.gca()
+        if n != ch-1 :
+            ax.axes.xaxis.set_visible(False)
+        #ax.axes.yaxis.set_visible(False)
         plt.plot()
 
     plt.figure(2)
     for n in range(ch):
         plt.subplot(ch,1,n+1)
         sns.cubehelix_palette(as_cmap=True, reverse=True)
+        
+        if (n%2) == 0: 
+            cmap = LinearSegmentedColormap.from_list('custom blue2',     ['#0099cc','#ffffff'], N=3)
+        else:
+            cmap = LinearSegmentedColormap.from_list('custom blue',     ['#0000ff','#ffffff'], N=3)
         sns.heatmap(data=data_test_r[n],fmt='.1f',linewidths='.05',cmap=cmap)
+        plt.ylabel('CH ' + str(n))
+        
+        ax = plt.gca()
+        if n != ch-1 :
+            ax.axes.xaxis.set_visible(False)
+        #ax.axes.yaxis.set_visible(False)
         plt.plot()
 
 else:
@@ -378,16 +414,19 @@ else:
                 strVal = json_data["test"+str(np)]["w"+str(n)+"l"+str(li)]
                 #print('ch [' + str(n) + '_w_' + str(np) + '] ' + strVal)
                 data_test_w[li][n].append(strVal.split(' '))
-                data_test_w[li][n][np].remove('')
+                data_test_w[li][n][np] = ' '.join(data_test_w[li][n][np]).split()
+                
+                #data_test_w[li][n][np].remove('')
                 
                 strVal = json_data["test"+str(np)]["r"+str(n)+"l"+str(li)]
                 #print('ch [' + str(n) + '_w_' + str(np) + '] ' + strVal)
                 data_test_r[li][n].append(strVal.split(' '))
-                data_test_r[li][n][np].remove('')
+                data_test_r[li][n][np] = ' '.join(data_test_r[li][n][np]).split()
+                #data_test_r[li][n][np].remove('')
 
     for li in range(lun_cnt):
         for np in range(ch):
-            for n in range(tc):
+            for n in range(test_cnt):
                 data_test_w[li][np][n] = [int (i) for i in data_test_w[li][np][n]]
                 data_test_r[li][np][n] = [int (i) for i in data_test_r[li][np][n]]
 
@@ -397,28 +436,56 @@ else:
 
 
     testlist = []
-    for n in range(tc):
+    for n in range(test_cnt):
         testlist.append('test' + str(n))
 
     #print(testlist)
     #print('\n\n')
 
 
-    cmap = LinearSegmentedColormap.from_list('custom blue',     ['#0000ff','#ffffff'], N=3)
+    cmap = LinearSegmentedColormap.from_list('custom blue',      ['#0000ff','#ffffff'], N=3)#['#ffffff','#0000ff'], N=3)
+
+    yticklist = []
+    for ytickcnt in range(test_cnt+1):
+        if (ytickcnt%3) == 0:
+            yticklist.append(ytickcnt)
+    print(yticklist)
 
     for li in range(lun_cnt):
-        plt.figure(li+1)
+        plt.figure(li)
         #plt.title("write LUN %d" % li)
         for n in range(ch):
             plt.subplot(ch,1,n+1)
-            sns.heatmap(data=data_test_w[li][n],fmt='.1f',linewidths='.1',cmap=cmap)
+            plt.xticks([])
+            plt.yticks([])
+            plt.rcParams["figure.figsize"] = [9, 4]
+            plt.tight_layout(pad=0)
+
+            sns.heatmap(data=data_test_w[li][n],fmt='.1f',linewidths='.1',cmap=cmap, vmin=0, vmax=2) #2 or 100
+            plt.grid(True, axis='y',color='green', alpha=0.1, linestyle='--')
+            plt.ylabel('CH ' + str(n))
+            if n != (ch-1):
+                ax = plt.gca()
+                ax.axes.xaxis.set_visible(False)
+
             plt.plot()
 
         plt.figure(li+lun_cnt)
-        #plt.title("read LUN %d" % (li+lun_cnt))
+        # #plt.title("read LUN %d" % (li+lun_cnt))
         for n in range(ch):
             plt.subplot(ch,1,n+1)
-            sns.heatmap(data=data_test_r[li][n],fmt='.1f',linewidths='.1',cmap=cmap)
+            plt.xticks([])
+            plt.yticks([])
+            plt.rcParams["figure.figsize"] = [9, 4]
+            plt.tight_layout(pad=0)
+
+            sns.heatmap(data=data_test_r[li][n],fmt='.1f',linewidths='.1',cmap=cmap, vmin=0, vmax=2) #2 or 100
+            plt.grid(True, axis='y',color='green', alpha=0.1, linestyle='--')
+            plt.ylabel('CH ' + str(n))
+            if n != (ch-1):
+                ax = plt.gca()
+                ax.axes.xaxis.set_visible(False)
+
             plt.plot()
 
 plt.show()

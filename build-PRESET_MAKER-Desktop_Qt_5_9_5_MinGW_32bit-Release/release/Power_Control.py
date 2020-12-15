@@ -20,12 +20,12 @@ class PowerCtrl:
             self.f.write(str(strDes))
             self.f.close()
 
-    def PowerOn(self):
+    def PowerOff(self):
         self._writeMsg('[' + str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')) + '] <<< Module Power on sequence >>>\n')
         GPIO.output(17, False)
         time.sleep(5)
         
-    def PowerOff(self):
+    def PowerOn(self):
         self._writeMsg('[' + str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')) + '] <<< Module Power off sequence >>>\n')
         GPIO.output(17, True)
         time.sleep(5)

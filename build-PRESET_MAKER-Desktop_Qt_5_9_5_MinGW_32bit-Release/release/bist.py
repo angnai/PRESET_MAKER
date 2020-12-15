@@ -2,7 +2,7 @@ import argparse
 import configparser
 import Chamber_Control
 import BIST_Control
-#import Power_Control
+import power_ctrl
 import time
 import datetime
 
@@ -153,9 +153,15 @@ def Execute_BIST_Cmd(bist_cmd, mDevices, log_name):
                 prt_log(dev.GetDeviceName() + 'ret value = ' + str(ret) + '\n')
 
                 if ret == -1:
-                    Remove_Device(mDevices,dev.GetDeviceName())
-                    prt_log('!!!!test out device <' + dev.GetDeviceName() + '>\n')
-                
+                    if(bist_cmd.find('init') == -1):
+                        Remove_Device(mDevices,dev.GetDeviceName())
+                        prt_log(bist_cmd + '!!!!test out device <' + dev.GetDeviceName() + '>\n')
+                elif ret == -2:
+                    PwrCtrl = power_ctrl.PowerCtrl(mDevices,log_name)
+                    PwrCtrl.PowerOff()
+                    PwrCtrl.PowerOn()
+                    
+
                 devices.remove(dev)
                 break
                 
@@ -207,7 +213,7 @@ def Execute_Chamber_Cmd(chb_cmd,arg1,chb_dev,mDevice,log_name):
     return 0
 
 def Execute_Power_Cmd(pwr_cmd,mDevice,log_name):
-    PwrCtrl = Power_control.PowerCtrl(mDevice,log_name)
+    PwrCtrl = power_ctrl.PowerCtrl(mDevice,log_name)
 
     if pwr_cmd == 'on':
         PwrCtrl.PowerOn()
