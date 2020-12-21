@@ -114,16 +114,28 @@ MainWindow::~MainWindow()
     vallist["ch_ce_ce_2"] = ui->ch_ce_ce_txt_2->text();
     vallist["ch_ce_index_2"] = ui->ch_ce_index_txt_2->text();
 
-    vallist["si_start_ch"] = ui->si_start_ch_txt->text();
-    vallist["si_end_ch"] = ui->si_end_ch_txt->text();
-    vallist["si_start_lun"] = ui->si_start_lun_txt->text();
-    vallist["si_end_lun"] = ui->si_end_lun_txt->text();
+    vallist["si_ch0"] = ui->si_ch0_txt->text();
+    vallist["si_ch1"] = ui->si_ch1_txt->text();
+    vallist["si_ch2"] = ui->si_ch2_txt->text();
+    vallist["si_ch3"] = ui->si_ch3_txt->text();
+    vallist["si_ch4"] = ui->si_ch4_txt->text();
+    vallist["si_ch5"] = ui->si_ch5_txt->text();
+    vallist["si_ch6"] = ui->si_ch6_txt->text();
+    vallist["si_ch7"] = ui->si_ch7_txt->text();
+    vallist["si_ch8"] = ui->si_ch8_txt->text();
+    vallist["si_ch9"] = ui->si_ch9_txt->text();
+    vallist["si_ch10"] = ui->si_ch10_txt->text();
+    vallist["si_ch11"] = ui->si_ch11_txt->text();
     vallist["si_freq"] = ui->si_freq_txt->text();
 
     vallist["para_test_cnt"] = ui->para_test_cnt_txt->text();
     vallist["para_random"] = ui->para_random_txt->text();
     vallist["para_pattern"] = ui->para_pattern_txt->text();
     vallist["para_diff"] = ui->para_diff_txt->text();
+
+    vallist["vref_mode"] = ui->vref_mode_txt->text();
+    vallist["vref_channel"] = ui->vref_channel_txt->text();
+    vallist["vref_mV"] = ui->vref_mV_txt->text();
     title["val_list"] = vallist;
 
     Write();
@@ -163,6 +175,8 @@ void MainWindow::PresetCommand_Init()
     //cmdString.append("n set_odt_to_nand ");
     cmdString.append("n sel_index_to_soc ");
     cmdString.append("n sel_index_to_nand ");
+    cmdString.append("n set_vref ");
+    cmdString.append("n get_vref ");
 
 
     presetString.empty();
@@ -180,6 +194,8 @@ void MainWindow::PresetCommand_Init()
     //presetString.append("nand_odt");
     presetString.append("soc_index");
     presetString.append("nand_index");
+    presetString.append("set_vref");
+    presetString.append("get_vref");
 
 }
 
@@ -246,6 +262,8 @@ void MainWindow::Make()
     jsonarr.append("get_window");
     jsonarr.append("get_para");
     jsonarr.append("si_para");
+    jsonarr.append("set_vref");
+    jsonarr.append("get_vref");
     jsonarr.append("power_off");
     cmdlist["list"] = jsonarr;
     cmdlist["val"] = "power_on";
@@ -289,16 +307,28 @@ void MainWindow::Make()
     vallist["ch_ce_ce_2"] = "0";
     vallist["ch_ce_index_2"] = "1";
 
-    vallist["si_start_ch"] = "0";
-    vallist["si_end_ch"] = "11";
-    vallist["si_start_lun"] = "0";
-    vallist["si_end_lun"] = "3";
+    vallist["si_ch0"] = "33";
+    vallist["si_ch1"] = "33";
+    vallist["si_ch2"] = "33";
+    vallist["si_ch3"] = "33";
+    vallist["si_ch4"] = "33";
+    vallist["si_ch5"] = "33";
+    vallist["si_ch6"] = "33";
+    vallist["si_ch7"] = "33";
+    vallist["si_ch8"] = "ff";
+    vallist["si_ch9"] = "ff";
+    vallist["si_ch10"] = "ff";
+    vallist["si_ch11"] = "ff";
     vallist["si_freq"] = "600";
 
-    vallist["para_test_cnt"] = "2500";
+    vallist["para_test_cnt"] = "10";
     vallist["para_random"] = "0";
-    vallist["para_pattern"] = "123";
+    vallist["para_pattern"] = "504065060";
     vallist["para_diff"] = "3";
+
+    vallist["vref_mode"] = "all";
+    vallist["vref_channel"] = "all";
+    vallist["vref_mV"] = "600";
     title["val_list"] = vallist;
 
 
@@ -560,10 +590,18 @@ void MainWindow::DefaultValueOfComboBox()
     ui->ch_ce_ce_txt_2->setText(vallist["ch_ce_ce_2"].toString());
     ui->ch_ce_index_txt_2->setText(vallist["ch_ce_index_2"].toString());
 
-    ui->si_start_ch_txt->setText(vallist["si_start_ch"].toString());
-    ui->si_end_ch_txt->setText(vallist["si_end_ch"].toString());
-    ui->si_start_lun_txt->setText(vallist["si_start_lun"].toString());
-    ui->si_end_lun_txt->setText(vallist["si_end_lun"].toString());
+    ui->si_ch0_txt->setText(vallist["si_ch0"].toString());
+    ui->si_ch1_txt->setText(vallist["si_ch1"].toString());
+    ui->si_ch2_txt->setText(vallist["si_ch2"].toString());
+    ui->si_ch3_txt->setText(vallist["si_ch3"].toString());
+    ui->si_ch4_txt->setText(vallist["si_ch4"].toString());
+    ui->si_ch5_txt->setText(vallist["si_ch5"].toString());
+    ui->si_ch6_txt->setText(vallist["si_ch6"].toString());
+    ui->si_ch7_txt->setText(vallist["si_ch7"].toString());
+    ui->si_ch8_txt->setText(vallist["si_ch8"].toString());
+    ui->si_ch9_txt->setText(vallist["si_ch9"].toString());
+    ui->si_ch10_txt->setText(vallist["si_ch10"].toString());
+    ui->si_ch11_txt->setText(vallist["si_ch11"].toString());
     ui->si_freq_txt->setText(vallist["si_freq"].toString());
 
     ui->para_test_cnt_txt->setText(vallist["para_test_cnt"].toString());
@@ -571,6 +609,9 @@ void MainWindow::DefaultValueOfComboBox()
     ui->para_pattern_txt->setText(vallist["para_pattern"].toString());
     ui->para_diff_txt->setText(vallist["para_diff"].toString());
 
+    ui->vref_mode_txt->setText(vallist["vref_mode"].toString());
+    ui->vref_channel_txt->setText(vallist["vref_channel"].toString());
+    ui->vref_mV_txt->setText(vallist["vref_mV"].toString());
 
     ui->parser_CB->addItem("ch");
     ui->parser_CB->addItem("lun");
@@ -597,6 +638,7 @@ void MainWindow::Enable_Frame(int n)
 
     ui->si_frame->setVisible(false);
     ui->si_para_frame->setVisible(false);
+    ui->vref_frame->setVisible(false);
 
     switch(n){
     case INIT_FRAME  :
@@ -635,6 +677,9 @@ void MainWindow::Enable_Frame(int n)
         break;
     case PARA_FRAME :
         ui->si_para_frame->setVisible(true);
+        break;
+    case VREF_FRAME :
+        ui->vref_frame->setVisible(true);
         break;
     default:
         break;
@@ -699,6 +744,12 @@ void MainWindow::on_Sel_CB_currentIndexChanged(const QString &arg1)
         Enable_Frame(ALL_DISABLE);
     }
     else if(arg1 == "add_index_val"){
+        Enable_Frame(ALL_DISABLE);
+    }
+    else if(arg1 == "set_vref") {
+        Enable_Frame(VREF_FRAME);
+    }
+    else if(arg1 == "get_vref"){
         Enable_Frame(ALL_DISABLE);
     }
 }
@@ -939,6 +990,7 @@ void MainWindow::on_Add_CMD_clicked()
 {
 
     QString str;
+    bool ok;
 
     str = ui->Sel_CB->currentText();
 
@@ -953,10 +1005,19 @@ void MainWindow::on_Add_CMD_clicked()
     }
     else if(str == "si"){
         str = "n si ";
-        str += ui->si_start_ch_txt->text() + " ";
-        str += ui->si_end_ch_txt->text() + " ";
-        str += ui->si_start_lun_txt->text() + " ";
-        str += ui->si_end_lun_txt->text() + " ";
+        str += QString::number(ui->si_ch0_txt->text().toUInt(&ok,16)) + " ";
+        str += QString::number(ui->si_ch1_txt->text().toUInt(&ok,16)) + " ";
+        str += QString::number(ui->si_ch2_txt->text().toUInt(&ok,16)) + " ";
+        str += QString::number(ui->si_ch3_txt->text().toUInt(&ok,16)) + " ";
+        str += QString::number(ui->si_ch4_txt->text().toUInt(&ok,16)) + " ";
+        str += QString::number(ui->si_ch5_txt->text().toUInt(&ok,16)) + " ";
+        str += QString::number(ui->si_ch6_txt->text().toUInt(&ok,16)) + " ";
+        str += QString::number(ui->si_ch7_txt->text().toUInt(&ok,16)) + " ";
+        str += QString::number(ui->si_ch8_txt->text().toUInt(&ok,16)) + " ";
+        str += QString::number(ui->si_ch9_txt->text().toUInt(&ok,16)) + " ";
+        str += QString::number(ui->si_ch10_txt->text().toUInt(&ok,16)) + " ";
+        str += QString::number(ui->si_ch11_txt->text().toUInt(&ok,16)) + " ";
+
         str += ui->si_freq_txt->text();
     }
     else if(str == "get_window"){
@@ -1107,6 +1168,15 @@ void MainWindow::on_Add_CMD_clicked()
             str += ui->ch_ce_ce_txt_2->text() + " ";
             str += ui->ch_ce_index_txt_2->text();
         }
+    }
+    else if(str == "set_vref"){
+        str = "n set_vref ";
+        str += ui->vref_mode_txt->text() + " ";
+        str += ui->vref_channel_txt->text() + " ";
+        str += ui->vref_mV_txt->text() + " ";
+    }
+    else if(str == "get_vref"){
+        str = "n get_vref";
     }
 
     ui->Preset_List->addItem(str);
@@ -1997,4 +2067,14 @@ void MainWindow::on_Chk_Next_CMD_3_clicked()
 {
     ui->Run_frame->show();
     ui->Check_frame->hide();
+}
+
+void MainWindow::on_si_ch0_txt_returnPressed()
+{
+    ui->si_ch1_txt->setFocus();
+}
+
+void MainWindow::on_si_ch1_txt_returnPressed()
+{
+    ui->si_ch2_txt->setFocus();
 }

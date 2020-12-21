@@ -36,6 +36,7 @@ class MainWindow : public QMainWindow
 #define	NAND_INDEX_CHCE_FRAME	11
 #define SI_FRAME 12
 #define PARA_FRAME 13
+#define VREF_FRAME 14
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -93,6 +94,10 @@ private slots:
     void on_log_parsing_CMD_clicked();
 
     void on_Chk_Next_CMD_3_clicked();
+
+    void on_si_ch0_txt_returnPressed();
+
+    void on_si_ch1_txt_returnPressed();
 
 private:
     QString output1;

@@ -2303,7 +2303,7 @@
       <rect>
        <x>570</x>
        <y>10</y>
-       <width>261</width>
+       <width>271</width>
        <height>111</height>
       </rect>
      </property>
@@ -2318,12 +2318,12 @@
        <rect>
         <x>10</x>
         <y>15</y>
-        <width>56</width>
+        <width>30</width>
         <height>12</height>
        </rect>
       </property>
       <property name="text">
-       <string>start_ch</string>
+       <string>ch0</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -2332,14 +2332,14 @@
      <widget class="QLabel" name="label_62">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>45</x>
         <y>15</y>
-        <width>56</width>
+        <width>30</width>
         <height>12</height>
        </rect>
       </property>
       <property name="text">
-       <string>end_ch</string>
+       <string>ch1</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -2348,9 +2348,9 @@
      <widget class="QLabel" name="label_63">
       <property name="geometry">
        <rect>
-        <x>141</x>
+        <x>230</x>
         <y>15</y>
-        <width>56</width>
+        <width>30</width>
         <height>12</height>
        </rect>
       </property>
@@ -2361,22 +2361,25 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLineEdit" name="si_start_ch_txt">
+     <widget class="QLineEdit" name="si_ch0_txt">
       <property name="geometry">
        <rect>
-        <x>16</x>
-        <y>31</y>
-        <width>50</width>
+        <x>10</x>
+        <y>30</y>
+        <width>30</width>
         <height>20</height>
        </rect>
       </property>
+      <property name="text">
+       <string>33</string>
+      </property>
      </widget>
-     <widget class="QLineEdit" name="si_end_ch_txt">
+     <widget class="QLineEdit" name="si_ch1_txt">
       <property name="geometry">
        <rect>
-        <x>87</x>
+        <x>45</x>
         <y>30</y>
-        <width>50</width>
+        <width>30</width>
         <height>20</height>
        </rect>
       </property>
@@ -2384,45 +2387,48 @@
      <widget class="QLineEdit" name="si_freq_txt">
       <property name="geometry">
        <rect>
-        <x>156</x>
+        <x>229</x>
         <y>30</y>
-        <width>50</width>
+        <width>30</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="text">
+       <string>400</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_64">
       <property name="geometry">
        <rect>
-        <x>12</x>
-        <y>60</y>
-        <width>56</width>
+        <x>80</x>
+        <y>14</y>
+        <width>30</width>
         <height>12</height>
        </rect>
       </property>
       <property name="text">
-       <string>start_lun</string>
+       <string>ch2</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLineEdit" name="si_start_lun_txt">
+     <widget class="QLineEdit" name="si_ch2_txt">
       <property name="geometry">
        <rect>
-        <x>16</x>
-        <y>76</y>
-        <width>50</width>
+        <x>80</x>
+        <y>30</y>
+        <width>30</width>
         <height>20</height>
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="si_end_lun_txt">
+     <widget class="QLineEdit" name="si_ch3_txt">
       <property name="geometry">
        <rect>
-        <x>87</x>
-        <y>75</y>
-        <width>50</width>
+        <x>115</x>
+        <y>30</y>
+        <width>30</width>
         <height>20</height>
        </rect>
       </property>
@@ -2430,14 +2436,228 @@
      <widget class="QLabel" name="label_65">
       <property name="geometry">
        <rect>
-        <x>82</x>
-        <y>60</y>
-        <width>56</width>
+        <x>115</x>
+        <y>15</y>
+        <width>30</width>
         <height>12</height>
        </rect>
       </property>
       <property name="text">
-       <string>end_lun</string>
+       <string>ch3</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_90">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>15</y>
+        <width>30</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ch4</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="si_ch4_txt">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>30</y>
+        <width>30</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="si_ch8_txt">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>80</y>
+        <width>30</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_91">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>65</y>
+        <width>30</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ch10</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_92">
+      <property name="geometry">
+       <rect>
+        <x>115</x>
+        <y>65</y>
+        <width>30</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ch9</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="si_ch7_txt">
+      <property name="geometry">
+       <rect>
+        <x>45</x>
+        <y>80</y>
+        <width>30</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="si_ch10_txt">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>80</y>
+        <width>30</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_93">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>65</y>
+        <width>30</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ch8</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_94">
+      <property name="geometry">
+       <rect>
+        <x>45</x>
+        <y>65</y>
+        <width>30</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ch7</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_95">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>65</y>
+        <width>30</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ch6</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="si_ch6_txt">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>30</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>33</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="si_ch9_txt">
+      <property name="geometry">
+       <rect>
+        <x>115</x>
+        <y>80</y>
+        <width>30</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_96">
+      <property name="geometry">
+       <rect>
+        <x>185</x>
+        <y>15</y>
+        <width>30</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ch5</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="si_ch5_txt">
+      <property name="geometry">
+       <rect>
+        <x>185</x>
+        <y>30</y>
+        <width>30</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>33</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="si_ch11_txt">
+      <property name="geometry">
+       <rect>
+        <x>185</x>
+        <y>80</y>
+        <width>30</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_97">
+      <property name="geometry">
+       <rect>
+        <x>185</x>
+        <y>65</y>
+        <width>30</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ch11</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -2599,6 +2819,100 @@
      <property name="text">
       <string>BACK</string>
      </property>
+    </widget>
+    <widget class="QFrame" name="vref_frame">
+     <property name="geometry">
+      <rect>
+       <x>570</x>
+       <y>10</y>
+       <width>240</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QLabel" name="label_98">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>15</y>
+        <width>56</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>mode</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_99">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>15</y>
+        <width>56</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>channel</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_100">
+      <property name="geometry">
+       <rect>
+        <x>141</x>
+        <y>15</y>
+        <width>56</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>mV</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="vref_mode_txt">
+      <property name="geometry">
+       <rect>
+        <x>16</x>
+        <y>31</y>
+        <width>50</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="vref_channel_txt">
+      <property name="geometry">
+       <rect>
+        <x>87</x>
+        <y>30</y>
+        <width>50</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="vref_mV_txt">
+      <property name="geometry">
+       <rect>
+        <x>156</x>
+        <y>30</y>
+        <width>50</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QFrame" name="Main_frame">
