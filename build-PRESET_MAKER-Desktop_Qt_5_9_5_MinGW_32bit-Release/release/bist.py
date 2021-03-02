@@ -164,6 +164,8 @@ def Execute_BIST_Cmd(bist_cmd, mDevices, log_name):
 
                 devices.remove(dev)
                 break
+
+            #time.sleep(0.1)
                 
             
         if len(devices) == 0 :

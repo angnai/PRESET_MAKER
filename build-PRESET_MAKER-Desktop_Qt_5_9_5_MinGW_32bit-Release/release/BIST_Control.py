@@ -69,42 +69,58 @@ class BIST(threading.Thread) :
         self._writeMsg('[' + str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')) + '] Trans>>>' + self.send_cmd + '\n')
         
 
-        while not self.exit:
+        while True:
             
-            
-            for c in self.com.read():
-                if c == 0x0d:
-                        continue
-                
-                line = line + chr(c)
-                if c == 0x0a:
-                    print(line)
-                    self._writeMsg(line)
-                    if str(line) == "start function\n":
-                        print(self.name, 'input value start...')
-                        timeout_val = LIMIT_TIMEOUT
-
-                    elif str(line) == "end function\n": 
-                        print('input value end...')
-                        self.ret_val = 1
-                        break
-
-                    elif str(line) == "err function\n":
-                        print('input value err...')
-                        self.ret_val = -1
-                        break;
+            try:
+                for c in self.com.read():
+                    try:
+                        if c == 0x0d:
+                                continue
+                    except:
+                        print('exception...')
                     
-                    line = '';
+                    line = line + chr(c)
 
-            #time.sleep(0.01)
-        
-            if ((time.time() - self.start_time) >= timeout_val) :
-                self.ret_val = -1
-                break
+                    
+                    if c == 0x0a:
+                        print(line)
+                        self._writeMsg(line)
+
+                        try:
+                            if str(line) == "start function\n":
+                                print(self.name, 'input value start...')
+                                timeout_val = LIMIT_TIMEOUT
+
+                            elif str(line) == "end function\n": 
+                                print('input value end...')
+                                self.ret_val = 1
+                                break
+
+                            elif str(line) == "err function\n":
+                                print('input value err...')
+                                self.ret_val = -1
+                                break
+                        except:
+                            print('exception2..')
+
+                        line = ''
+            except:
+                print('exception...5')
+
+
+            try:            
+                if ((time.time() - self.start_time) >= timeout_val) :
+                    self.ret_val = -1
+                    break
+            except:
+                print('exception3...')
 
             if self.ret_val != 0 :
                 break
-
+        
+            #if ((time.time() - self.start_time) >= 2) :
+            #    time.sleep(0.2)
+            
         self.com.close()
 
     def join(self):

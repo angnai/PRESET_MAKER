@@ -988,7 +988,6 @@ void MainWindow::on_Make_CMD_clicked()
 
 void MainWindow::on_Add_CMD_clicked()
 {
-
     QString str;
     bool ok;
 

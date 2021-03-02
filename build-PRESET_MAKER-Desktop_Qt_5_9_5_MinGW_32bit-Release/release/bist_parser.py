@@ -110,10 +110,16 @@ strValueLunWrite = []
 strValueLunRead = []
 strCount = []
 strLunCount = []
+
+write_left_right_center_val = []
+read_left_right_center_val = []
 for n in range(ch):
     strValueWrite.append([])
     strValueRead.append([])
     strCount.append(0)
+
+    write_left_right_center_val.append([])
+    read_left_right_center_val.append([])
 
     strValueLunWrite.append([])
     strValueLunRead.append([])
@@ -121,18 +127,37 @@ for n in range(ch):
     for li in range(lun):
         strValueLunWrite[n].append([])
         strValueLunRead[n].append([])
+        
 
 ######################################## File read
 strRead = file_open_fnc(filename)
 strLines = strRead.splitlines()
-
-
 ######################################## File data parsing
 
+analysis_test_count = 1
 if analysis == 1:
-        
+
     for strN in range(len(strLines)):
+        
+        if strLines[strN].find('ch write read') != -1:
+            for n in range(ch):
+                write_left_right_center_val[n].append([])
+                write_left_right_center_val[n][strCount[n]-1] = []
+                read_left_right_center_val[n].append([])
+                read_left_right_center_val[n][strCount[n]-1] = []
+                
+                strValue = strLines[strN + 1 + n].split(' ')
+                write_left_right_center_val[n][strCount[n]-1].append(strValue[1])
+                read_left_right_center_val[n][strCount[n]-1].append(strValue[2])
+        elif strLines[strN].find('ch write_left write_right read_left read_right') != -1:
+            for n in range(ch):
+                strValue = strLines[strN + 1 + n].split(' ')
+                write_left_right_center_val[n][strCount[n]-1].append(strValue[1])
+                write_left_right_center_val[n][strCount[n]-1].append(strValue[2])
+                read_left_right_center_val[n][strCount[n]-1].append(strValue[3])
+                read_left_right_center_val[n][strCount[n]-1].append(strValue[4])
         for n in range(ch):
+           
             if n < 10:
                 findStr = '============ test CH[0' + str(n)
             else:
@@ -140,6 +165,9 @@ if analysis == 1:
             
             startIndex = strLines[strN].find(findStr)
             if startIndex != -1:
+
+                strValueWrite[n].append([])
+                strValueRead[n].append([])
 
                 for li in range(lun):
                     strValueLunWrite[n][li].append([])
@@ -173,60 +201,120 @@ if analysis == 1:
                     startIndex = strLines[np].find("LUN[ALL] PROG ")
                     if startIndex != -1:
                         strVal = strLines[np]
-                        strValueWrite[n].append(strVal[14:(len(strVal)+14)])
+                        strValueWrite[n][strCount[n]] = strVal[14:(len(strVal)+14)]
                         break
 
                 for np in range(strN,len(strLines)):
                     startIndex = strLines[np].find("LUN[ALL] READ ")
                     if startIndex != -1:
                         strVal = strLines[np]
-                        strValueRead[n].append(strVal[14:(len(strVal)+14)])
+                        strValueRead[n][strCount[n]] = strVal[14:(len(strVal)+14)]
                         break
 
                 for li in range(lun):
                     if not strValueLunWrite[n][li][strCount[n]]:
                         continue
-
-                    strValueLunWrite[n][li][strCount[n]] = strValueLunWrite[n][li][strCount[n]].replace('u','7 ')
-                    strValueLunWrite[n][li][strCount[n]] = strValueLunWrite[n][li][strCount[n]].replace('%','7 ')
-                    strValueLunWrite[n][li][strCount[n]] = strValueLunWrite[n][li][strCount[n]].replace('x','7 ')
-                    strValueLunWrite[n][li][strCount[n]] = strValueLunWrite[n][li][strCount[n]].replace('z','7 ')
-                    strValueLunWrite[n][li][strCount[n]] = strValueLunWrite[n][li][strCount[n]].replace(',','5 ')
-                    strValueLunWrite[n][li][strCount[n]] = strValueLunWrite[n][li][strCount[n]].replace('.','3 ')
-                    strValueLunWrite[n][li][strCount[n]] = strValueLunWrite[n][li][strCount[n]].replace('@','3 ')
-                    strValueLunWrite[n][li][strCount[n]] = strValueLunWrite[n][li][strCount[n]].replace('$','1 ')
-                    strValueLunWrite[n][li][strCount[n]] = strValueLunWrite[n][li][strCount[n]].replace('!','1 ')
+                    else:
+                        #if (strValueLunWrite[n][li][strCount[n]][2] >= '0') and (strValueLunWrite[n][li][strCount[n]][2] <= '9'):
+                        #    continue;
+                        checkCount = strValueLunWrite[n][li][strCount[n]].split(' ')
+                        checkCount = ' '.join(checkCount).split()
+                        if (checkCount[0][0] >= '0') and (checkCount[0][0] <= '9'):
+                            continue;
+                        
+                        
+                        if len(strValueLunWrite[n][li][strCount[n]]) > 128:
+                            strValueLunWrite[n][li][strCount[n]] = strValueLunWrite[n][li][strCount[n]][0:128]
+                            
+                        strValueLunWrite[n][li][strCount[n]] = strValueLunWrite[n][li][strCount[n]].replace('u','7 ')
+                        strValueLunWrite[n][li][strCount[n]] = strValueLunWrite[n][li][strCount[n]].replace('%','7 ')
+                        strValueLunWrite[n][li][strCount[n]] = strValueLunWrite[n][li][strCount[n]].replace('x','7 ')
+                        strValueLunWrite[n][li][strCount[n]] = strValueLunWrite[n][li][strCount[n]].replace('z','7 ')
+                        strValueLunWrite[n][li][strCount[n]] = strValueLunWrite[n][li][strCount[n]].replace(',','5 ')
+                        strValueLunWrite[n][li][strCount[n]] = strValueLunWrite[n][li][strCount[n]].replace('.','3 ')
+                        strValueLunWrite[n][li][strCount[n]] = strValueLunWrite[n][li][strCount[n]].replace('@','3 ')
+                        strValueLunWrite[n][li][strCount[n]] = strValueLunWrite[n][li][strCount[n]].replace('$','1 ')
+                        strValueLunWrite[n][li][strCount[n]] = strValueLunWrite[n][li][strCount[n]].replace('!','1 ')
                     
-                                
-                    strValueLunRead[n][li][strCount[n]] = strValueLunRead[n][li][strCount[n]].replace('u','7 ')
-                    strValueLunRead[n][li][strCount[n]] = strValueLunRead[n][li][strCount[n]].replace('%','7 ')
-                    strValueLunRead[n][li][strCount[n]] = strValueLunRead[n][li][strCount[n]].replace('x','7 ')
-                    strValueLunRead[n][li][strCount[n]] = strValueLunRead[n][li][strCount[n]].replace('z','7 ')
-                    strValueLunRead[n][li][strCount[n]] = strValueLunRead[n][li][strCount[n]].replace(',','5 ')
-                    strValueLunRead[n][li][strCount[n]] = strValueLunRead[n][li][strCount[n]].replace('.','3 ')
-                    strValueLunRead[n][li][strCount[n]] = strValueLunRead[n][li][strCount[n]].replace('@','3 ')
-                    strValueLunRead[n][li][strCount[n]] = strValueLunRead[n][li][strCount[n]].replace('$','1 ')
-                    strValueLunRead[n][li][strCount[n]] = strValueLunRead[n][li][strCount[n]].replace('!','1 ')
+                    if not strValueLunRead[n][li][strCount[n]]:
+                        continue
+                    else:
+                        #if (strValueLunRead[n][li][strCount[n]][2] >= '0') and (strValueLunRead[n][li][strCount[n]][2] <= '9'):
+                        #    continue;
+                        checkCount = strValueLunRead[n][li][strCount[n]].split(' ')
+                        checkCount = ' '.join(checkCount).split()
+                        if (checkCount[0][0] >= '0') and (checkCount[0][0] <= '9'):
+                            continue;
+                        
+                        if len(strValueLunRead[n][li][strCount[n]]) > 128:
+                            strValueLunRead[n][li][strCount[n]] = strValueLunRead[n][li][strCount[n]][0:128]
+
+                        strValueLunRead[n][li][strCount[n]] = strValueLunRead[n][li][strCount[n]].replace('u','7 ')
+                        strValueLunRead[n][li][strCount[n]] = strValueLunRead[n][li][strCount[n]].replace('%','7 ')
+                        strValueLunRead[n][li][strCount[n]] = strValueLunRead[n][li][strCount[n]].replace('x','7 ')
+                        strValueLunRead[n][li][strCount[n]] = strValueLunRead[n][li][strCount[n]].replace('z','7 ')
+                        strValueLunRead[n][li][strCount[n]] = strValueLunRead[n][li][strCount[n]].replace(',','5 ')
+                        strValueLunRead[n][li][strCount[n]] = strValueLunRead[n][li][strCount[n]].replace('.','3 ')
+                        strValueLunRead[n][li][strCount[n]] = strValueLunRead[n][li][strCount[n]].replace('@','3 ')
+                        strValueLunRead[n][li][strCount[n]] = strValueLunRead[n][li][strCount[n]].replace('$','1 ')
+                        strValueLunRead[n][li][strCount[n]] = strValueLunRead[n][li][strCount[n]].replace('!','1 ')
                 
-                strValueWrite[n][strCount[n]] = strValueWrite[n][strCount[n]].replace('u','7 ')
-                strValueWrite[n][strCount[n]] = strValueWrite[n][strCount[n]].replace('%','7 ')
-                strValueWrite[n][strCount[n]] = strValueWrite[n][strCount[n]].replace('x','7 ')
-                strValueWrite[n][strCount[n]] = strValueWrite[n][strCount[n]].replace('z','7 ')
-                strValueWrite[n][strCount[n]] = strValueWrite[n][strCount[n]].replace(',','5 ')
-                strValueWrite[n][strCount[n]] = strValueWrite[n][strCount[n]].replace('.','3 ')
-                strValueWrite[n][strCount[n]] = strValueWrite[n][strCount[n]].replace('@','3 ')
-                strValueWrite[n][strCount[n]] = strValueWrite[n][strCount[n]].replace('$','1 ')
-                strValueWrite[n][strCount[n]] = strValueWrite[n][strCount[n]].replace('!','1 ')
+                    
                 
-                strValueRead[n][strCount[n]] = strValueRead[n][strCount[n]].replace('u','7 ')
-                strValueRead[n][strCount[n]] = strValueRead[n][strCount[n]].replace('%','7 ')
-                strValueRead[n][strCount[n]] = strValueRead[n][strCount[n]].replace('x','7 ')
-                strValueRead[n][strCount[n]] = strValueRead[n][strCount[n]].replace('z','7 ')
-                strValueRead[n][strCount[n]] = strValueRead[n][strCount[n]].replace(',','5 ')
-                strValueRead[n][strCount[n]] = strValueRead[n][strCount[n]].replace('.','3 ')
-                strValueRead[n][strCount[n]] = strValueRead[n][strCount[n]].replace('@','3 ')
-                strValueRead[n][strCount[n]] = strValueRead[n][strCount[n]].replace('$','1 ')
-                strValueRead[n][strCount[n]] = strValueRead[n][strCount[n]].replace('!','1 ')
+                if not strValueWrite[n][strCount[n]]:
+                    strCount[n] = strCount[n] + 1
+                    continue
+                else:
+                    #if (strValueWrite[n][strCount[n]][2] >= '0') and (strValueWrite[n][strCount[n]][2] <= '9'):
+                    #    strCount[n] = strCount[n] + 1
+                    #    continue
+                    checkCount = strValueWrite[n][strCount[n]].split(' ')
+                    checkCount = ' '.join(checkCount).split()
+                    if (checkCount[0][0] >= '0') and (checkCount[0][0] <= '9'):
+                        strCount[n] = strCount[n] + 1
+                        continue;
+                    
+                    analysis_test_count = 0
+                    if len(strValueWrite[n][strCount[n]]) > 128:
+                        strValueWrite[n][strCount[n]] = strValueWrite[n][strCount[n]][0:128]
+
+                    strValueWrite[n][strCount[n]] = strValueWrite[n][strCount[n]].replace('u','7 ')
+                    strValueWrite[n][strCount[n]] = strValueWrite[n][strCount[n]].replace('%','7 ')
+                    strValueWrite[n][strCount[n]] = strValueWrite[n][strCount[n]].replace('x','7 ')
+                    strValueWrite[n][strCount[n]] = strValueWrite[n][strCount[n]].replace('z','7 ')
+                    strValueWrite[n][strCount[n]] = strValueWrite[n][strCount[n]].replace(',','5 ')
+                    strValueWrite[n][strCount[n]] = strValueWrite[n][strCount[n]].replace('.','3 ')
+                    strValueWrite[n][strCount[n]] = strValueWrite[n][strCount[n]].replace('@','3 ')
+                    strValueWrite[n][strCount[n]] = strValueWrite[n][strCount[n]].replace('$','1 ')
+                    strValueWrite[n][strCount[n]] = strValueWrite[n][strCount[n]].replace('!','1 ')
+                
+                
+                if not strValueRead[n][strCount[n]]:
+                    strCount[n] = strCount[n] + 1
+                    continue
+                else:
+                    #if (strValueRead[n][strCount[n]][2] >= '0') and (strValueRead[n][strCount[n]][2] <= '9'):
+                    #    strCount[n] = strCount[n] + 1
+                    #    continue
+                    checkCount = strValueRead[n][strCount[n]].split(' ')
+                    checkCount = ' '.join(checkCount).split()
+                    if (checkCount[0][0] >= '0') and (checkCount[0][0] <= '9'):
+                        strCount[n] = strCount[n] + 1
+                        continue;
+
+                    analysis_test_count = 0
+                    if len(strValueRead[n][strCount[n]]) > 128:
+                        strValueRead[n][strCount[n]] = strValueRead[n][strCount[n]][0:128]
+
+                    strValueRead[n][strCount[n]] = strValueRead[n][strCount[n]].replace('u','7 ')
+                    strValueRead[n][strCount[n]] = strValueRead[n][strCount[n]].replace('%','7 ')
+                    strValueRead[n][strCount[n]] = strValueRead[n][strCount[n]].replace('x','7 ')
+                    strValueRead[n][strCount[n]] = strValueRead[n][strCount[n]].replace('z','7 ')
+                    strValueRead[n][strCount[n]] = strValueRead[n][strCount[n]].replace(',','5 ')
+                    strValueRead[n][strCount[n]] = strValueRead[n][strCount[n]].replace('.','3 ')
+                    strValueRead[n][strCount[n]] = strValueRead[n][strCount[n]].replace('@','3 ')
+                    strValueRead[n][strCount[n]] = strValueRead[n][strCount[n]].replace('$','1 ')
+                    strValueRead[n][strCount[n]] = strValueRead[n][strCount[n]].replace('!','1 ')
 
                 strCount[n] = strCount[n] + 1
 
@@ -234,45 +322,14 @@ if analysis == 1:
     for n in range(ch):
         if tc < strCount[n]:
             tc = strCount[n]
-
-    ######################################## Search valid left right center tap
-    write_left_right_center_val = []
-    read_left_right_center_val = []
-    for n in range(ch):
-
-        write_left_right_center_val.append([])
-        read_left_right_center_val.append([])
-
-        for np in range(tc):
-            write_left_right_center_val[n].append([])
-            read_left_right_center_val[n].append([])
-
-            if strCount[n] == 0:
-                write_left_right_center_val[n][np].append(0)
-                write_left_right_center_val[n][np].append(0)
-                write_left_right_center_val[n][np].append(0)
-                read_left_right_center_val[n][np].append(0)
-                read_left_right_center_val[n][np].append(0)
-                read_left_right_center_val[n][np].append(0)
-            else:
-                left_val,right_val,center_val = Search_Left_Right_Center(strValueWrite[n][np])
-                write_left_right_center_val[n][np].append(left_val)
-                write_left_right_center_val[n][np].append(right_val)
-                write_left_right_center_val[n][np].append(center_val)
-
-            
-                left_val,right_val,center_val = Search_Left_Right_Center(strValueRead[n][np])
-                read_left_right_center_val[n][np].append(left_val)
-                read_left_right_center_val[n][np].append(right_val)
-                read_left_right_center_val[n][np].append(center_val)
-
-
+    print('tc = ' + str(tc))
     ######################################## Write Json format
     file_data = OrderedDict()
     file_data["file"] = filename
     file_data["testcnt"] = tc
     file_data["channelcnt"] = ch
     file_data["luncnt"] = lun
+
 
     for n in range(tc):
         na1 = 'test'+str(n)
@@ -314,14 +371,15 @@ if analysis == 1:
                     file_data[na1][na2] = strValueLunRead[np][li][n]
         
         na1 = 'test_val'+str(n)
-        file_data[na1] = {'left_right_center_w0':[write_left_right_center_val[0][n][0],write_left_right_center_val[0][n][1],write_left_right_center_val[0][n][2]]}
+        file_data[na1] = {'left_right_center_w0':[write_left_right_center_val[0][n][1],write_left_right_center_val[0][n][2],write_left_right_center_val[0][n][0]]}
         for np in range(ch-1):
             na2 = 'left_right_center_w'+str(np+1)
-            file_data[na1][na2] = write_left_right_center_val[np+1][n][0],write_left_right_center_val[np+1][n][1],write_left_right_center_val[np+1][n][2]
+            print(na2)
+            file_data[na1][na2] = write_left_right_center_val[np+1][n][1],write_left_right_center_val[np+1][n][2],write_left_right_center_val[np+1][n][0]
         
         for np in range(ch):
             na2 = 'left_right_center_r'+str(np)
-            file_data[na1][na2] = read_left_right_center_val[np][n][0],read_left_right_center_val[np][n][1],read_left_right_center_val[np][n][2]
+            file_data[na1][na2] = read_left_right_center_val[np][n][1],read_left_right_center_val[np][n][2],read_left_right_center_val[np][n][0]
 
 
     ######################################## Write Json file
@@ -341,6 +399,24 @@ channel_cnt = json_data["channelcnt"]
 print('channel count = ' + str(channel_cnt))
 lun_cnt = json_data["luncnt"]
 print('lun count = ' + str(lun_cnt))
+
+
+if output_index == 'ui':
+    for tc in range(test_cnt):
+        str_ui = ''
+        for n in range(channel_cnt):
+            left = json_data['test_val'+str(tc)]['left_right_center_w'+str(n)][0]
+            right = json_data['test_val'+str(tc)]['left_right_center_w'+str(n)][1]
+            ui_val = (int(right) - int(left) + 1) / 128
+            str_ui = str_ui + str(ui_val) + ' '
+        for n in range(channel_cnt):
+            left = json_data['test_val'+str(tc)]['left_right_center_r'+str(n)][0]
+            right = json_data['test_val'+str(tc)]['left_right_center_r'+str(n)][1]
+            ui_val = (int(right) - int(left) + 1) / 128
+            str_ui = str_ui + str(ui_val) + ' '
+        print(str_ui)
+    sys.exit()
+
 
 ch_data_test_w = []
 ch_data_test_r = []
@@ -448,6 +524,14 @@ plt.rc('ytick', labelsize=SMALL_SIZE) # fontsize of the tick labels
 plt.rc('legend', fontsize=SMALL_SIZE) # legend fontsize
 plt.rc('figure', titlesize=BIGGER_SIZE) # fontsize of the figure title
 
+
+range_yticks = []
+range_ytexts = []
+for np in range(test_cnt):
+    range_yticks.append(np)
+    range_ytexts.append(format((1000 - (np * 50))/1000,'.2f') + 'v')
+
+
 if output_index == 'ch_all':
 
     fig.append(plt.figure(1,figsize=(20,10)))
@@ -460,9 +544,15 @@ if output_index == 'ch_all':
         else:
             cmap = LinearSegmentedColormap.from_list('custom blue2',     ['#99ffcc','#ffffff'], N=3)
         sns.cubehelix_palette(as_cmap=True, reverse=True)
-        sns.heatmap(data=ch_data_test_w[n],fmt='.1f',linewidths='.05',cmap=cmap, vmin=0, vmax=1)
+        if analysis_test_count == 0:
+            sns.heatmap(data=ch_data_test_w[n],fmt='.1f',linewidths='.05',cmap=cmap, vmin=0, vmax=1)
+        else:
+            sns.heatmap(data=ch_data_test_w[n],fmt='.1f',linewidths='.05',cmap=cmap, vmin=0, vmax=1)
+        
         plt.grid(True, axis='y',color='green', alpha=0.1, linestyle='--')
         plt.ylabel('CH ' + str(n))
+        plt.yticks(range_yticks, range_ytexts, rotation=45)
+        
         
         if n != ch-1 :
             ax = plt.gca()
@@ -478,10 +568,16 @@ if output_index == 'ch_all':
             cmap = LinearSegmentedColormap.from_list('custom blue2',     ['#0099cc','#ffffff'], N=3)
         else:
             cmap = LinearSegmentedColormap.from_list('custom blue',     ['#0000ff','#ffffff'], N=3)
-        sns.cubehelix_palette(as_cmap=True, reverse=True)    
-        sns.heatmap(data=ch_data_test_r[n],fmt='.1f',linewidths='.05',cmap=cmap, vmin=0, vmax=1)
+        sns.cubehelix_palette(as_cmap=True, reverse=True)
+        if analysis_test_count == 0:
+            sns.heatmap(data=ch_data_test_r[n],fmt='.1f',linewidths='.05',cmap=cmap, vmin=0, vmax=1)
+        else:
+            sns.heatmap(data=ch_data_test_r[n],fmt='.1f',linewidths='.05',cmap=cmap, vmin=0, vmax=1)
+        
         plt.grid(True, axis='y',color='green', alpha=0.1, linestyle='--')
         plt.ylabel('CH ' + str(n))
+        plt.yticks(range_yticks, range_ytexts, rotation=45)
+        
         
         if n != ch-1 :
             ax = plt.gca()
@@ -501,9 +597,15 @@ elif output_index == 'lun_all':
             else:
                 cmap = LinearSegmentedColormap.from_list('custom blue2',     ['#99ffcc','#ffffff'], N=3)
             sns.cubehelix_palette(as_cmap=True, reverse=True)
-            sns.heatmap(data=lun_data_test_w[li][n],fmt='.1f',linewidths='.1',cmap=cmap, vmin=0, vmax=1) #2 or 100
+            if analysis_test_count == 0:
+            	sns.heatmap(data=lun_data_test_w[li][n],fmt='.1f',linewidths='.1',cmap=cmap, vmin=0, vmax=1) #2 or 100
+            else:
+                sns.heatmap(data=lun_data_test_w[li][n],fmt='.1f',linewidths='.1',cmap=cmap, vmin=0, vmax=1) #2 or 100
+
             plt.grid(True, axis='y',color='green', alpha=0.1, linestyle='--')
             plt.ylabel('CH ' + str(n))
+            plt.yticks(range_yticks, range_ytexts, rotation=45)
+            
             
             if n != (ch-1):
                 ax = plt.gca()
@@ -521,10 +623,15 @@ elif output_index == 'lun_all':
             else:
                 cmap = LinearSegmentedColormap.from_list('custom blue',     ['#0000ff','#ffffff'], N=3)
             sns.cubehelix_palette(as_cmap=True, reverse=True)
-            sns.heatmap(data=lun_data_test_r[li][n],fmt='.1f',linewidths='.1',cmap=cmap, vmin=0, vmax=1) #2 or 100
+            if analysis_test_count == 0:
+                sns.heatmap(data=lun_data_test_r[li][n],fmt='.1f',linewidths='.1',cmap=cmap, vmin=0, vmax=1) #2 or 100
+            else:
+                sns.heatmap(data=lun_data_test_r[li][n],fmt='.1f',linewidths='.1',cmap=cmap, vmin=0, vmax=1) #2 or 100
             plt.grid(True, axis='y',color='green', alpha=0.1, linestyle='--')
             plt.ylabel('CH ' + str(n))
+            plt.yticks(range_yticks, range_ytexts, rotation=45)
             
+
             if n != (ch-1):
                 ax = plt.gca()
                 ax.axes.xaxis.set_visible(False)
@@ -533,34 +640,49 @@ elif output_index == 'lun_all':
 
 elif output_index == 'each_ch':
     
+    spec = gridspec.GridSpec(ncols=1, nrows=2, height_ratios=[1, 1])
     for n in range(ch):
         fig.append(plt.figure(n,figsize=(20,10)))
-        fn.append('write_channel_%d.png' % n)
+        fn.append('each_ch%d.png' % n)
+
+        plt.subplot(spec[0])
 
         
         cmap = LinearSegmentedColormap.from_list('custom blue',     ['#0099cc','#ffffff'], N=3)
         sns.cubehelix_palette(as_cmap=True, reverse=True)
-        sns.heatmap(data=ch_data_test_w[n],fmt='.1f',linewidths='.05',cmap=cmap, vmin=0, vmax=1)
+        if analysis_test_count == 0:
+            sns.heatmap(data=ch_data_test_w[n],fmt='.1f',linewidths='.05',cmap=cmap, vmin=0, vmax=1)
+        else:
+            sns.heatmap(data=ch_data_test_w[n],fmt='.1f',linewidths='.05',cmap=cmap, vmin=0, vmax=1)
         plt.grid(True, axis='y',color='green', alpha=0.1, linestyle='--')
         plt.ylabel('W_CH ' + str(n))
+        
         #ax = plt.gca()
         #ax.axes.xaxis.set_visible(False)
-        plt.plot()
+        #plt.plot()
 
-        fig.append(plt.figure(n+ch,figsize=(20,10)))
-        fn.append('read_channel_%d.png' % n)
+        #fig.append(plt.figure(n+ch,figsize=(20,10)))
+        #fn.append('read_channel_%d.png' % n)
+        plt.subplot(spec[1])
 
         cmap = LinearSegmentedColormap.from_list('custom blue',     ['#0000ff','#ffffff'], N=3)
-        sns.cubehelix_palette(as_cmap=True, reverse=True)    
-        sns.heatmap(data=ch_data_test_r[n],fmt='.1f',linewidths='.05',cmap=cmap, vmin=0, vmax=1)
+        sns.cubehelix_palette(as_cmap=True, reverse=True)
+        if analysis_test_count == 0:
+            sns.heatmap(data=ch_data_test_r[n],fmt='.1f',linewidths='.05',cmap=cmap, vmin=0, vmax=1)
+        else:
+            sns.heatmap(data=ch_data_test_r[n],fmt='.1f',linewidths='.05',cmap=cmap, vmin=0, vmax=1)
+
         plt.grid(True, axis='y',color='green', alpha=0.1, linestyle='--')
         plt.ylabel('R_CH ' + str(n))
+        #plt.yticks(range_yticks, range_ytexts, rotation=45)
+        
         #ax = plt.gca()
         #ax.axes.xaxis.set_visible(False)
         plt.plot()
     
 
 elif output_index == 'each_lun':
+
     spec = gridspec.GridSpec(ncols=1, nrows=2, height_ratios=[1, 1])
     for li in range(lun_cnt):
         for n in range(ch):
@@ -572,9 +694,14 @@ elif output_index == 'each_lun':
             
             cmap = LinearSegmentedColormap.from_list('custom blue',     ['#0099cc','#ffffff'], N=3)
             sns.cubehelix_palette(as_cmap=True, reverse=True)
-            sns.heatmap(data=lun_data_test_w[li][n],fmt='.1f',linewidths='.1',cmap=cmap, vmin=0, vmax=1) #2 or 100
+            if analysis_test_count == 0:
+                sns.heatmap(data=lun_data_test_w[li][n],fmt='.1f',linewidths='.1',cmap=cmap, vmin=0, vmax=1) #2 or 100
+            else:
+                sns.heatmap(data=lun_data_test_w[li][n],fmt='.1f',linewidths='.1',cmap=cmap, vmin=0, vmax=1) #2 or 100
             plt.grid(True, axis='y',color='green', alpha=0.1, linestyle='--')
             plt.ylabel('W_CH[' + str(n) + ']LUN[' + str(li) + ']')
+            plt.yticks(range_yticks, range_ytexts, rotation=45)
+            
             
             #ax = plt.gca()
             #ax.axes.xaxis.set_visible(False)
@@ -586,9 +713,14 @@ elif output_index == 'each_lun':
             
             cmap = LinearSegmentedColormap.from_list('custom blue',     ['#0000ff','#ffffff'], N=3)
             sns.cubehelix_palette(as_cmap=True, reverse=True)
-            sns.heatmap(data=lun_data_test_r[li][n],fmt='.1f',linewidths='.1',cmap=cmap, vmin=0, vmax=1) #2 or 100
+            if analysis_test_count == 0:
+                sns.heatmap(data=lun_data_test_r[li][n],fmt='.1f',linewidths='.1',cmap=cmap, vmin=0, vmax=1) #2 or 100
+            else:
+                sns.heatmap(data=lun_data_test_r[li][n],fmt='.1f',linewidths='.1',cmap=cmap, vmin=0, vmax=1) #2 or 100
             plt.grid(True, axis='y',color='green', alpha=0.1, linestyle='--')
             plt.ylabel('R_CH[' + str(n) + ']LUN[' + str(li) + ']')
+            plt.yticks(range_yticks, range_ytexts, rotation=45)
+            
 
             #ax = plt.gca()
             #ax.axes.xaxis.set_visible(False)
