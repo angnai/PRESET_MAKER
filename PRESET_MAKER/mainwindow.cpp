@@ -1003,21 +1003,24 @@ void MainWindow::on_Add_CMD_clicked()
         str += ui->init_freq_txt->text();
     }
     else if(str == "si"){
-        str = "n si ";
-        str += QString::number(ui->si_ch0_txt->text().toUInt(&ok,16)) + " ";
-        str += QString::number(ui->si_ch1_txt->text().toUInt(&ok,16)) + " ";
-        str += QString::number(ui->si_ch2_txt->text().toUInt(&ok,16)) + " ";
-        str += QString::number(ui->si_ch3_txt->text().toUInt(&ok,16)) + " ";
-        str += QString::number(ui->si_ch4_txt->text().toUInt(&ok,16)) + " ";
-        str += QString::number(ui->si_ch5_txt->text().toUInt(&ok,16)) + " ";
-        str += QString::number(ui->si_ch6_txt->text().toUInt(&ok,16)) + " ";
-        str += QString::number(ui->si_ch7_txt->text().toUInt(&ok,16)) + " ";
-        str += QString::number(ui->si_ch8_txt->text().toUInt(&ok,16)) + " ";
-        str += QString::number(ui->si_ch9_txt->text().toUInt(&ok,16)) + " ";
-        str += QString::number(ui->si_ch10_txt->text().toUInt(&ok,16)) + " ";
-        str += QString::number(ui->si_ch11_txt->text().toUInt(&ok,16)) + " ";
-
-        str += ui->si_freq_txt->text();
+        if (ui->si_ch0_txt->text() == "all") {
+            str = "n si all";
+        } else {
+            str = "n si ";
+            str += QString::number(ui->si_ch0_txt->text().toUInt(&ok,16)) + " ";
+            str += QString::number(ui->si_ch1_txt->text().toUInt(&ok,16)) + " ";
+            str += QString::number(ui->si_ch2_txt->text().toUInt(&ok,16)) + " ";
+            str += QString::number(ui->si_ch3_txt->text().toUInt(&ok,16)) + " ";
+            str += QString::number(ui->si_ch4_txt->text().toUInt(&ok,16)) + " ";
+            str += QString::number(ui->si_ch5_txt->text().toUInt(&ok,16)) + " ";
+            str += QString::number(ui->si_ch6_txt->text().toUInt(&ok,16)) + " ";
+            str += QString::number(ui->si_ch7_txt->text().toUInt(&ok,16)) + " ";
+            str += QString::number(ui->si_ch8_txt->text().toUInt(&ok,16)) + " ";
+            str += QString::number(ui->si_ch9_txt->text().toUInt(&ok,16)) + " ";
+            str += QString::number(ui->si_ch10_txt->text().toUInt(&ok,16)) + " ";
+            str += QString::number(ui->si_ch11_txt->text().toUInt(&ok,16)) + " ";
+            str += ui->si_freq_txt->text();
+        }
     }
     else if(str == "get_window"){
         str = "n get_window all";
