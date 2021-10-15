@@ -8,7 +8,7 @@ import os.path
 BAUDRATE = 115200
 MIN = (60)
 HOUR = (MIN*60)
-LIMIT_TIMEOUT = (3*HOUR)
+LIMIT_TIMEOUT = (999*HOUR)
 
 
 
@@ -54,7 +54,8 @@ class BIST(threading.Thread) :
 
     def _writeMsg(self, strDes):
         self.f = open(self.name,'a')
-        self.f.write(str(strDes))
+        #self.f.write(str(strDes))
+        self.f.write(strDes)
         self.f.close()
 
     def run(self):
@@ -68,7 +69,7 @@ class BIST(threading.Thread) :
         self.com.write(self.send_cmd.encode())
         self._writeMsg('[' + str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')) + '] Trans>>>' + self.send_cmd + '\n')
         
-
+        bufaa = ""
         while True:
             
             try:
@@ -77,14 +78,20 @@ class BIST(threading.Thread) :
                         if c == 0x0d:
                                 continue
                     except:
-                        print('exception...')
+                        bufaa += "err0"
+                        self._writeMsg(str(bufaa))
+                        bufaa = ""
+                        print('exception..')
+                        self.ret_val = 1
+                        break
                     
                     line = line + chr(c)
 
                     
                     if c == 0x0a:
-                        print(line)
-                        self._writeMsg(line)
+                        #print(line)
+                        #self._writeMsg(line)
+                        bufaa += (line)
 
                         try:
                             if str(line) == "start function\n":
@@ -93,19 +100,33 @@ class BIST(threading.Thread) :
 
                             elif str(line) == "end function\n": 
                                 print('input value end...')
+                                self._writeMsg(str(bufaa))
+                                bufaa = ""
                                 self.ret_val = 1
                                 break
 
                             elif str(line) == "err function\n":
+                                self._writeMsg(str(bufaa))
+                                bufaa = ""
                                 print('input value err...')
-                                self.ret_val = -1
+                                self.ret_val = 1
                                 break
                         except:
+                            bufaa += "err2"
+                            self._writeMsg(str(bufaa))
+                            bufaa = ""
                             print('exception2..')
+                            self.ret_val = 1
+                            break
 
                         line = ''
             except:
-                print('exception...5')
+                bufaa += "err5"
+                self._writeMsg(str(bufaa))
+                bufaa = ""
+                print('exception5..')
+                self.ret_val = 1
+                break
 
 
             try:            
