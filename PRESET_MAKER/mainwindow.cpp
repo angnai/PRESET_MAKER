@@ -1948,7 +1948,7 @@ void MainWindow::on_Run_CMD_clicked()
     QString path;
     path = QApplication::applicationDirPath()+"/"+"bist.py";
     path.replace("/","\\");
-    QString cmd_qt = QString("python3 \"" + path +"\" -D %2 -P %3 -T %4").arg(ui->port_CB->currentText()).arg(ui->run_preset_txt->text()).arg(ui->run_text_txt->text());
+    QString cmd_qt = QString("python \"" + path +"\" -D %2 -P %3 -T %4").arg(ui->port_CB->currentText()).arg(ui->run_preset_txt->text()).arg(ui->run_text_txt->text());
 
     const char* cmd = cmd_qt.toUtf8();
     system(cmd);
