@@ -66,7 +66,13 @@ class BIST(threading.Thread) :
         line = ''
         timeout_val = 60
         self.ret_val = 0
-        self.com.write(self.send_cmd.encode())
+        if 1:
+            for c in self.send_cmd:
+                send_ch = c
+                self.com.write(send_ch.encode())
+                time.sleep(0.01)
+        else:
+            self.com.write(self.send_cmd.encode())
         self._writeMsg('[' + str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')) + '] Trans>>>' + self.send_cmd + '\n')
         
         bufaa = ""
